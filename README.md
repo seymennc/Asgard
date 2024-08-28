@@ -1,0 +1,76 @@
+
+![Logo](https://i.hizliresim.com/jefstda.png)
+
+This is a PHP Boilerplate project. Asgard is a PHP full-stack web framework that is light, fast, flexible, and secure.
+
+## Badges
+
+[![Latest Stable Version](http://poser.pugx.org/seyme/asgard/v?style=for-the-badge)](https://packagist.org/packages/seyme/asgard) 
+
+[![Total Downloads](http://poser.pugx.org/seyme/asgard/downloads?style=for-the-badge)](https://packagist.org/packages/seyme/asgard) 
+
+[![Latest Unstable Version](http://poser.pugx.org/seyme/asgard/v/unstable?style=for-the-badge)](https://packagist.org/packages/seyme/asgard) 
+
+[![License](http://poser.pugx.org/seyme/asgard/license?style=for-the-badge)](https://packagist.org/packages/seyme/asgard) 
+
+[![PHP Version Require](http://poser.pugx.org/seyme/asgard/require/php?style=for-the-badge)](https://packagist.org/packages/seyme/asgard)
+
+[![Version](http://poser.pugx.org/seyme/asgard/version?style=for-the-badge)](https://packagist.org/packages/seyme/asgard)
+
+## 🔗 Links
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://seymencayir.com.tr/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/seymennc)
+[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/benseymenemen)
+
+
+## Installation
+
+Install Asgard-Boilerplate with composer
+
+```bash
+  composer require seyme/asgard
+```
+Open the project in your IDE and start the server.
+```bash
+  php -S localhost:8080
+```
+
+This project ready for use!
+    
+### Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:seymennc/Asgard.git
+```
+
+Go to the project directory
+
+```bash
+  cd my-project
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  php -S localhost:8080
+```
+
+## Our ♥️ Contributors
+<a href="https://github.com/seymennc/Asgard/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=seymennc/Asgard" />
+</a>
+
+
+## License
+
+
+Licensed under the  GNU GENERAL PUBLIC LICENSE, Copyright © 2024-present BLC Studio
+

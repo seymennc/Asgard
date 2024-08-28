@@ -1,0 +1,18 @@
+{
+    "name": "seymennc/asgard",
+    "autoload": {
+        "psr-4": {
+            "Seymennc\\Asgard\\": "src/",
+            "Asgard\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "Seymen Çayır",
+            "email": "seymencayir429@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
