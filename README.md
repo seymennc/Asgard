@@ -1,21 +1,21 @@
 
 ![Logo](https://i.hizliresim.com/jefstda.png)
 
-This is a PHP Boilerplate project. Asgard is a PHP full-stack web framework that is light, fast, flexible, and secure.
+This is a PHP Framework project. Asgard is a lightweight, fast, flexible, developable, secure and open source PHP full-stack web framework.
 
 ## Badges
 
-[![Latest Stable Version](http://poser.pugx.org/seyme/asgard/v?style=for-the-badge)](https://packagist.org/packages/seyme/asgard) 
+[![Latest Stable Version](http://poser.pugx.org/seymennc/asgard/v?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
 
-[![Total Downloads](http://poser.pugx.org/seyme/asgard/downloads?style=for-the-badge)](https://packagist.org/packages/seyme/asgard) 
+[![Total Downloads](http://poser.pugx.org/seymennc/asgard/downloads?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
 
-[![Latest Unstable Version](http://poser.pugx.org/seyme/asgard/v/unstable?style=for-the-badge)](https://packagist.org/packages/seyme/asgard) 
+[![Latest Unstable Version](http://poser.pugx.org/seymennc/asgard/v/unstable?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
 
-[![License](http://poser.pugx.org/seyme/asgard/license?style=for-the-badge)](https://packagist.org/packages/seyme/asgard) 
+[![License](http://poser.pugx.org/seymennc/asgard/license?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
 
-[![PHP Version Require](http://poser.pugx.org/seyme/asgard/require/php?style=for-the-badge)](https://packagist.org/packages/seyme/asgard)
+[![PHP Version Require](http://poser.pugx.org/seymennc/asgard/require/php?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
-[![Version](http://poser.pugx.org/seyme/asgard/version?style=for-the-badge)](https://packagist.org/packages/seyme/asgard)
+[![Version](http://poser.pugx.org/seymennc/asgard/version?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://seymencayir.com.tr/)
