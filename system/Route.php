@@ -1,7 +1,9 @@
 <?php
 
-namespace Asgard\Core;
+namespace Asgard\system;
 
+
+use Asgard\App\Helpers\Redirect;
 
 class Route
 {
@@ -13,6 +15,8 @@ class Route
     public static bool $hasRoute = false;
     public static array $routes = [];
     public static string $prefix = '';
+
+
 
     /**
      * @param $path
@@ -43,26 +47,30 @@ class Route
     {
         $url = self::getUrl();
         $methods = self::getMethods();
-
         foreach (self::$routes[$methods] as $path => $val) {
-            $callback = $val['callback'];
             foreach (self::$patterns as $key => $pattern) {
-               $path = preg_replace('#' . $key . '#', $pattern, $path);
+                $path = preg_replace('#' . $key . '#', $pattern, $path);
             }
-            $pattern = '@^' . $path . '$@';
-            if (preg_match($pattern, $url, $params)){
+            $pattern = '#^' . $path . '$#';
+            if (preg_match($pattern, $url, $params)) {
+                self::$hasRoute = true;
                 array_shift($params);
 
-                self::$hasRoute = true;
-                if (is_callable($callback)){
-                    echo call_user_func_array($callback, $params);
-                }elseif (is_string($callback)){
-                    [$controllerStr, $action] = explode('@', $callback);
+                if (isset($val['redirect'])) {
+                    Redirect::to($val['redirect'], $val['status']);
+                } else {
+                    $callback = $val['callback'];
 
-                    $controllerStr = '\Asgard\App\Controllers\\' . $controllerStr;
-                    $controller = new $controllerStr();
+                    if (is_callable($callback)) {
+                        echo call_user_func_array($callback, $params);
+                    } elseif (is_string($callback)) {
+                        [$controllerStr, $action] = explode('@', $callback);
 
-                    echo call_user_func_array([$controller, $action], $params);
+                        $controllerStr = '\Asgard\App\Controllers\\' . $controllerStr;
+                        $controller = new $controllerStr();
+
+                        echo call_user_func_array([$controller, $action], $params);
+                    }
                 }
             }
         }
@@ -71,7 +79,7 @@ class Route
 
     public static function hasRoute(): void
     {
-        if (self::$hasRoute === false){
+        if (self::$hasRoute === false) {
             die('Page not found');
         }
     }
@@ -86,7 +94,7 @@ class Route
 
     public static function getUrl(): array|string
     {
-        return str_replace(getenv("BASE_PATH"), null, $_SERVER['REQUEST_URI']);
+        return str_replace(getenv("BASE_PATH"), '', $_SERVER['REQUEST_URI']);
     }
 
     /**
@@ -110,7 +118,7 @@ class Route
         $route = array_filter(self::$routes['get'], fn($route) => $route['name'] === $name);
         $route = reset($route)['path'] ?? '';
 
-        return str_replace(array_keys($params), array_values($params), $route);
+        return str_replace(array_map(fn($key) => ':' . $key, array_keys($params)), array_values($params), $route);
     }
 
     public static function prefix($prefix): Route
@@ -118,8 +126,23 @@ class Route
         self::$prefix = $prefix;
         return new self();
     }
-    public static function group(\Closure $closure){
+
+    public static function group(\Closure $closure): void
+    {
         $closure();
         self::$prefix = '';
+    }
+
+    public function where($key, $pattern)
+    {
+        self::$patterns[':' . $key] = '(' . $pattern . ')';
+    }
+
+    public static function redirect($from, $to, $status = 301): void
+    {
+        self::$routes['get'][$from] = [
+            'redirect' => $to,
+            'status' => $status,
+        ];
     }
 }
