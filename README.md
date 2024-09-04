@@ -5,17 +5,17 @@ This is a PHP Framework project. Asgard is a lightweight, fast, flexible, develo
 
 ## Badges
 
-[![Latest Stable Version](http://poser.pugx.org/seymennc/asgard/v?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
+[![Latest Stable Version](https://poser.pugx.org/seymennc/asgard/v?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
 
-[![Total Downloads](http://poser.pugx.org/seymennc/asgard/downloads?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
+[![Total Downloads](https://poser.pugx.org/seymennc/asgard/downloads?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
 
-[![Latest Unstable Version](http://poser.pugx.org/seymennc/asgard/v/unstable?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
+[![Latest Unstable Version](https://poser.pugx.org/seymennc/asgard/v/unstable?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
 
-[![License](http://poser.pugx.org/seymennc/asgard/license?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
+[![License](https://poser.pugx.org/seymennc/asgard/license?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
 
-[![PHP Version Require](http://poser.pugx.org/seymennc/asgard/require/php?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
+[![PHP Version Require](https://poser.pugx.org/seymennc/asgard/require/php?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
-[![Version](http://poser.pugx.org/seymennc/asgard/version?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
+[![Version](https://poser.pugx.org/seymennc/asgard/version?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://seymencayir.com.tr/)
