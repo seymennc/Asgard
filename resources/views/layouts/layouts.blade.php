@@ -9,6 +9,5 @@
 
 @yield('content')
 
-@include('about')
 </body>
 </html>

@@ -75,6 +75,8 @@ class ComposerStaticInit4ef741404ef71294deb8efec2173af1f
     );
 
     public static $classMap = array (
+        'Asgard\\app\\Console\\Command\\Start' => __DIR__ . '/../..' . '/app/Console/Command/Start.php',
+        'Asgard\\app\\Console\\Console' => __DIR__ . '/../..' . '/app/Console/Console.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',

@@ -7,7 +7,13 @@
         },
         "files": [
             "App/Helpers/Helper.php"
+        ],
+        "classmap": [
+            "app/Console/"
         ]
+    },
+    "scripts": {
+        "create:start": "php create.php start"
     },
     "authors": [
         {
@@ -16,7 +22,7 @@
         }
     ],
     "require": {
-        "vlucas/phpdotenv": "^5.6",
+      "vlucas/phpdotenv": "^5.6",
       "ext-pdo": "*",
       "ext-http": "*"
     }

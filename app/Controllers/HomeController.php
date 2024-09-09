@@ -2,7 +2,7 @@
 
 namespace Asgard\App\Controllers;
 
-use Asgard\database\models\UserModel;
+use Asgard\database\models\User;
 
 class HomeController extends Controllers
 {
@@ -11,11 +11,19 @@ class HomeController extends Controllers
         $username = 'Seymen';
         //$user = Database::table('users')->get();
         //return $this->view('index', ['username' => $username, 'user' => $user]);
-        $user = UserModel::getData();
-        return $this->view('index', ['user' => $user]);
+        $user = User::getData();
+        return view('index', compact('user'));
     }
-    public function getUser($id, $id2, $id3)
+    public function getUser($id)
     {
-        return 'user id : ' . $id . ' user id 2 : ' . $id2 . ' user id 3: ' . $id3;
+        return 'user id : ' . $id;
+    }
+    public function admin()
+    {
+        return view('admin');
+    }
+    public function about()
+    {
+        return view('about');
     }
 }

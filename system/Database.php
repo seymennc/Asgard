@@ -11,6 +11,8 @@ class Database
     public array $where = [];
     protected string $sql = '';
 
+    protected $tableName = null;
+
     public function __construct()
     {
         $this->db = new \PDO(sprintf('mysql:host=%s;dbname=%s;charset=%s', getenv('DB_HOST'), getenv('DB_NAME'), getenv('DB_CHARSET')), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
@@ -56,10 +58,28 @@ class Database
         return $instance;
     }
 
+    public static function insert(array $data): void
+    {
+        $instance = new static();
+        $instance->sql = sprintf('INSERT INTO %s (%s) VALUES (%s)', $instance->getTableName(), implode(', ', array_keys($data)), ':' . implode(', :', array_keys($data)));
+
+        $query = $instance->db->prepare($instance->sql);
+
+        foreach ($data as $key => $value) {
+            $query->bindValue(':' . $key, $value);
+        }
+        $query->execute();
+    }
+
+    protected function getTableName(): string
+    {
+        $array = explode('\\', static::class);
+        return $this->tableName ?? sprintf(strtolower(end($array)) . '%s', 's');
+    }
+    
     protected function prepareSql(): void
     {
-
-        $this->sql = sprintf('SELECT * FROM %s', $this->tableName);
+        $this->sql = sprintf('SELECT * FROM %s', $this->getTableName());
         if (count($this->where)) {
             $this->sql .= ' WHERE ' . implode(' AND ', $this->where);
         }
