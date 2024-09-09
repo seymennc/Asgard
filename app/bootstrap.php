@@ -1,6 +1,6 @@
 <?php
 
-namespace Asgard\system;
+namespace Asgard\app;
 
 use Asgard\app\Helpers\Path;
 use Asgard\system\Route;
