@@ -25,7 +25,7 @@ This is a PHP Framework project. Asgard is a lightweight, fast, flexible, develo
 
 ## Installation
 
-Install Asgard-Boilerplate with composer
+Install Asgard-Framework with composer
 
 ```bash
   composer require seymennc/asgard
