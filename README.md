@@ -28,11 +28,11 @@ This is a PHP Framework project. Asgard is a lightweight, fast, flexible, develo
 Install Asgard-Boilerplate with composer
 
 ```bash
-  composer require seyme/asgard
+  composer require seymennc/asgard
 ```
 Open the project in your IDE and start the server.
 ```bash
-  php -S localhost:8080
+  php create.php start
 ```
 
 This project ready for use!
@@ -60,7 +60,7 @@ Install dependencies
 Start the server
 
 ```bash
-  php -S localhost:8080
+  php create.php start
 ```
 
 ## Our ♥️ Contributors
