@@ -34,16 +34,27 @@ class Console
     }
     public function run($argv): void
     {
-        $commandName = $argv[1] ?? null;
+        $input = $argv[1] ?? null;
+        if (!$input) {
+            $this->listCommands();
+            exit(1);
+        }
 
-        if (!$commandName || !array_key_exists($commandName, $this->commands)) {
+        [$commandName, $subCommand] = explode(':', $input) + [null, null];
+
+        if (!array_key_exists($commandName, $this->commands)) {
             $this->listCommands();
             exit(1);
         }
 
         $commandClass = $this->commands[$commandName];
         $commandInstance = new $commandClass();
-        $commandInstance->handle();
+
+        if (method_exists($commandInstance, $subCommand)) {
+            call_user_func([$commandInstance, $subCommand], array_slice($argv, 2));
+        } else {
+            $commandInstance->handle();
+        }
     }
 
     protected function listCommands()
