@@ -14,4 +14,5 @@ return array(
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Asgard\\' => array($baseDir . '/'),
+    'App\\' => array($baseDir . '/app'),
 );

@@ -6,6 +6,9 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Asgard\\app\\Console\\Command\\Generate' => $baseDir . '/app/Console/Command/Generate.php',
+    'Asgard\\app\\Console\\Command\\Migrate' => $baseDir . '/app/Console/Command/Migrate.php',
+    'Asgard\\app\\Console\\Command\\Seed' => $baseDir . '/app/Console/Command/Seed.php',
     'Asgard\\app\\Console\\Command\\Start' => $baseDir . '/app/Console/Command/Start.php',
     'Asgard\\app\\Console\\Console' => $baseDir . '/app/Console/Console.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

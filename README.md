@@ -1,17 +1,17 @@
 
-![Logo](https://i.hizliresim.com/jefstda.png)
+![Logo](https://seymencayir.com.tr/public/assets/projects/asgard/logo/asgard.png)
 
 This is a PHP Framework project. Asgard is a lightweight, fast, flexible, developable, secure and open source PHP full-stack web framework.
 
 ## Badges
 
-[![Latest Stable Version](https://poser.pugx.org/seymennc/asgard/v?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
+[![Latest Stable Version](https://poser.pugx.org/seymennc/asgard/v?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
-[![Total Downloads](https://poser.pugx.org/seymennc/asgard/downloads?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
+[![Total Downloads](https://poser.pugx.org/seymennc/asgard/downloads?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
-[![Latest Unstable Version](https://poser.pugx.org/seymennc/asgard/v/unstable?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
+[![Latest Unstable Version](https://poser.pugx.org/seymennc/asgard/v/unstable?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
-[![License](https://poser.pugx.org/seymennc/asgard/license?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard) 
+[![License](https://poser.pugx.org/seymennc/asgard/license?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
 [![PHP Version Require](https://poser.pugx.org/seymennc/asgard/require/php?style=for-the-badge)](https://packagist.org/packages/seymennc/asgard)
 
@@ -36,7 +36,7 @@ Open the project in your IDE and start the server.
 ```
 
 This project ready for use!
-    
+
 ### Run Locally
 
 Clone the project

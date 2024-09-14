@@ -2,7 +2,7 @@
 
 namespace Asgard\app;
 
-use Asgard\app\Middlewares\middlewares;
+use Asgard\App\Middlewares\middlewares;
 
 class Kernel
 {

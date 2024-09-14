@@ -3,7 +3,8 @@
     "autoload": {
         "psr-4": {
             "Seymennc\\Asgard\\": "src/",
-            "Asgard\\": "./"
+            "Asgard\\": "./",
+            "App\\": "app/"
         },
         "files": [
             "App/Helpers/Helper.php"

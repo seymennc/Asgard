@@ -92,6 +92,20 @@ class Generate
 
     public function controller(array $args): void
     {
-        //will be adding soon
+        $name = $args[0] ?? null;
+
+        if (!$name) {
+            echo "Lütfen controller ismi belirtin.\n";
+            exit(1);
+        }
+        $className = sprintf('%s', ucfirst($name));
+        $fileName = sprintf('%s.php', ucfirst($name));
+        $filePath = dirname(__DIR__) . '/../Controllers/' . $fileName;
+
+        $stub = "<?php\n\nnamespace Asgard\\app\\Controllers;\n\nuse Asgard\\database\\models\\User;\n\nclass " . $className . " extends Controllers\n{\n    public function index()\n    {\n        //TODO: Implement index() method.\n    }\n}\n";
+
+        file_put_contents($filePath, $stub);
+
+        echo "Generate file created: $fileName\n";
     }
 }

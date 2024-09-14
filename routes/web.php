@@ -22,19 +22,6 @@ Route::prefix('/admin?')->group(function () {
     Route::get('/settings', 'HomeController@index')->name('admin.settings');
 });
 
-Route::get('/@{username}', function ($username) {
-    return 'kullanıcı adı: ' . $username;
-})->where('username', '[a-z]+');
-
-Route::get('/search/:search', function ($search){
-    return 'Aranan kelime: ' . rawurldecode($search);
-})->where('search', '.*');
-
-
-Route::get('/about', 'HomeController@about')->middleware('deneme')->name('about');
-
-Route::post('/updateUser', function () {
-    return 'This is a update page';
-});
+Route::get('/about', 'HomeController@about')->name('about');
 
 Route::redirect('/php3', '/aboutd');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Asgard\app\Controllers;
+namespace Asgard\App\Controllers;
 
 
 class Controllers

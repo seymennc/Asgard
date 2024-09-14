@@ -36,6 +36,7 @@ class ComposerStaticInit4ef741404ef71294deb8efec2173af1f
         'A' => 
         array (
             'Asgard\\' => 7,
+            'App\\' => 4,
         ),
     );
 
@@ -72,9 +73,16 @@ class ComposerStaticInit4ef741404ef71294deb8efec2173af1f
         array (
             0 => __DIR__ . '/../..' . '/',
         ),
+        'App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app',
+        ),
     );
 
     public static $classMap = array (
+        'Asgard\\app\\Console\\Command\\Generate' => __DIR__ . '/../..' . '/app/Console/Command/Generate.php',
+        'Asgard\\app\\Console\\Command\\Migrate' => __DIR__ . '/../..' . '/app/Console/Command/Migrate.php',
+        'Asgard\\app\\Console\\Command\\Seed' => __DIR__ . '/../..' . '/app/Console/Command/Seed.php',
         'Asgard\\app\\Console\\Command\\Start' => __DIR__ . '/../..' . '/app/Console/Command/Start.php',
         'Asgard\\app\\Console\\Console' => __DIR__ . '/../..' . '/app/Console/Console.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
