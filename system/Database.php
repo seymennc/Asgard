@@ -23,12 +23,7 @@ class Database
 
     /** The code in this field is for Database::table('user')->get();**/
     /*
-    public static function table(string $table): Database
-    {
-        self::$table = $table;
-        return new self();
 
-    }
     public function where($column, $value, $operator = '=')
     {
         $this->where[] = $column . ' ' . $operator . ' "' . $value . '"';
@@ -43,6 +38,12 @@ class Database
 //            $this->sql .= ' WHERE ' . implode(' AND ', $this->where);
 //        }
 //    }
+
+    public static function table(string $table): Database
+    {
+        self::$table = $table;
+        return new self();
+    }
 
 /** The code in this field is for ModelName::where('status', 1)->get(); */
     /**
