@@ -3,6 +3,7 @@
 namespace Asgard\app\Controllers;
 
 use Asgard\database\models\User;
+use Asgard\system\Request;
 
 class HomeController extends Controllers
 {
@@ -15,8 +16,13 @@ class HomeController extends Controllers
     {
         return 'About controller noktası';
     }
-    public function post()
+    public function post(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'password' => 'required|min:6',
+        ]);
+
         return 'ok';
     }
 

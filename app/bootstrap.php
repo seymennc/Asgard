@@ -9,6 +9,9 @@ use Dotenv\Dotenv;
 class bootstrap
 {
 
+    /**
+     * @throws \ReflectionException
+     */
     public function __construct()
     {
         $dotenv = Dotenv::createUnsafeImmutable(dirname(__DIR__));
