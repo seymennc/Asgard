@@ -21,8 +21,10 @@ class Route
     public static array $routes = [];
     public static string $prefix = '';
     private static array $namedRoutes = [];
+    private static array $methods = [];
+    private static array $pageMethod = [];
 
-    public static function get($path, $callback): Route
+    /*public static function get($path, $callback): Route
     {
         return self::addRoute('get', $path, $callback);
     }
@@ -30,11 +32,28 @@ class Route
     public static function post($path, $callback): void
     {
         self::addRoute('post', $path, $callback);
+    }*/
+
+    public static function method($method): Route
+    {
+        self::$methods[$method] = [];
+        return new self();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function route($path, $callback): Route
+    {
+        return self::addRoute(array_key_last(self::$methods), $path, $callback);
     }
 
     private static function addRoute($method, $path, $callback): Route
     {
         $formattedPath = '/' . ltrim(self::$prefix . $path, '/');
+        if (isset(self::$routes[$method][$formattedPath])) {
+            throw new \Exception("This route already exists: {$formattedPath}");
+        }
         self::$routes[$method][$formattedPath] = ['callback' => $callback];
         return new self();
     }
@@ -101,6 +120,9 @@ class Route
 
     public static function hasRoute(): void
     {
+        if (self::getMethods() != self::$pageMethod){
+            die('The page is only works with POST method');
+        }
         if (self::$hasRoute === false) {
             die('Page not found');
         }
@@ -125,10 +147,13 @@ class Route
      */
     public function name(string $name): void
     {
-        $key = array_key_last(self::$routes['get']);
-
-        self::$routes['get'][$key]['name'] = $name;
-        self::$namedRoutes[$name] = $key;
+        $key = array_key_last(self::$methods);
+        if (isset(self::$namedRoutes[$name])) {
+            throw new \Exception("This route name already exists : {$name}");
+        }
+        $root_path = array_key_last(self::$routes[$key]);
+        self::$namedRoutes[$name] = [$key, $root_path];
+        self::$pageMethod = [$key];
     }
 
     public static function prefix($prefix): Route
@@ -150,18 +175,18 @@ class Route
 
     public static function redirect($from, $to, $status = 301): void
     {
-        self::$routes['get'][$from] = [
+        self::$routes[self::getMethods()][$from] = [
             'redirect' => $to,
             'status' => $status,
         ];
     }
-    public static function route(string $name, string $param = ''): string
+    public static function run(string $name, string $param = ''): string
     {
         if (!isset(self::$namedRoutes[$name])) {
-            throw new \Exception("Böyle bir route bulunamadı: {$name}");
+            throw new \Exception("This route not found: {$name}");
         }
 
-        $path = self::$namedRoutes[$name];
+        $path = self::$namedRoutes[$name][1];
         if ($param) {
             $path = explode('/', $path);
             $path = str_replace($path[2], $param, $path);
@@ -171,8 +196,8 @@ class Route
     }
     public function middleware(...$middlewares): Route
     {
-        $key = array_key_last(self::$routes['get']);
-        self::$routes['get'][$key]['middleware'] = $middlewares;
+        $key = array_key_last(self::$routes[self::getMethods()]);
+        self::$routes[self::getMethods()][$key]['middleware'] = $middlewares;
         return new self();
     }
 }
