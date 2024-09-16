@@ -58,6 +58,10 @@ class Route
         return new self();
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public static function dispatch(): void
     {
         $url = self::getUrl();
@@ -107,6 +111,9 @@ class Route
         return '#^' . rtrim($path, '/') . '/?$#';
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     private static function invokeCallback($callback, $params): void
     {
         if (is_callable($callback)) {
@@ -114,7 +121,27 @@ class Route
         } elseif (is_string($callback)) {
             [$controllerStr, $action] = explode('@', $callback);
             $controller = '\Asgard\App\Controllers\\' . $controllerStr;
-            echo call_user_func_array([new $controller, $action], $params);
+
+            // Kontrolör metodu bir Request nesnesi bekliyor mu?
+            $reflectionMethod = new \ReflectionMethod($controller, $action);
+            $requestInstance = null;
+
+            if ($reflectionMethod->getNumberOfParameters() > 0) {
+                // İlk parametreyi kontrol et (Request sınıfı mı?)
+                $firstParameter = $reflectionMethod->getParameters()[0];
+                $paramType = $firstParameter->getType();
+
+                if ($paramType && !$paramType->isBuiltin() && $paramType->getName() === 'Asgard\system\Request') {
+                    $requestInstance = new \Asgard\system\Request();
+                }
+            }
+
+            // Eğer Request nesnesi varsa, onu kontrolör metoduna geç
+            if ($requestInstance) {
+                echo call_user_func_array([new $controller, $action], array_merge([$requestInstance], $params));
+            } else {
+                echo call_user_func_array([new $controller, $action], $params);
+            }
         }
     }
 
