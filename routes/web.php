@@ -13,7 +13,7 @@
 
 use Asgard\System\Route;
 
-Route::get('/', 'HomeController@index')->name('home');
+/*Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/user/{id}', 'HomeController@getUser')->name('user');
 
@@ -24,4 +24,8 @@ Route::prefix('/admin?')->group(function () {
 
 Route::get('/about', 'HomeController@about')->name('about');
 
-Route::redirect('/php3', '/aboutd');
+Route::redirect('/php3', '/aboutd');*/
+
+Route::method('get')->route('/', 'HomeController@index')->name('home');
+Route::method('get')->route('/about/deneme/test', 'HomeController@about')->name('about');
+Route::method('post')->route('/post/deneme', 'HomeController@post')->name('post');

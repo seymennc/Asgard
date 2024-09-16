@@ -8,9 +8,14 @@
 <body>
 
 
-    bu bölüm site içeriği
-    <p>Hello! <?=$user->username?></p>
-    <a href="<?=route('about')?>">tıkla</a>
+    bu bölüm index içeriği
+
+    <a href="<?=route('about')?>">deneme</a>
+
+    <form action="<?=route('post')?>" method="POST">
+        <input type="text" name="name">
+        <button type="submit">Gönder</button>
+    </form>
 
 
 </body>

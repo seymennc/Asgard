@@ -8,12 +8,16 @@ class HomeController extends Controllers
 {
     public function index()
     {
-        return 'Index controller noktası';
+        return view('index');
     }
 
     public function about()
     {
         return 'About controller noktası';
+    }
+    public function post()
+    {
+        return 'ok';
     }
 
 }

@@ -20,7 +20,7 @@ function view(string $name, array $params = []): string
 
 function route(string $name, string $params = ''): string
 {
-    return Route::route($name, $params);
+    return Route::run($name, $params);
 }
 function redirect(string $name, string $params = ''): void
 {
