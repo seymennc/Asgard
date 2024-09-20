@@ -4,21 +4,15 @@ namespace Asgard\config;
 
 class Config
 {
-    public static function getAppData($key): mixed
-    {
-        $config = include __DIR__ . "/app.php";
-
-        return $config[$key] ?? null;
-    }
-
     /**
-     * @param $key
-     * @return mixed|null
+     * @param string $key
+     * @return string
      */
-    public static function getBladeData($key): mixed
+    public static function get(string $key): string
     {
-        $config = include __DIR__ . "/blade.php";
+        $key = explode('.', $key);
+        $config = include "{$key[0]}.php";
 
-        return $config[$key] ?? null;
+        return $config[$key[1]] ?? "empty";
     }
 }
