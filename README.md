@@ -32,7 +32,7 @@ Install Asgard-Framework with composer
 ```
 Open the project in your IDE and start the server.
 ```bash
-  php create.php start
+  php create start
 ```
 
 This project ready for use!
@@ -54,13 +54,13 @@ Go to the project directory
 Install dependencies
 
 ```bash
-  npm install
+  composer install
 ```
 
 Start the server
 
 ```bash
-  php create.php start
+  php create start
 ```
 
 ## Our ♥️ Contributors

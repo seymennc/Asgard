@@ -10,7 +10,9 @@ class ComposerStaticInita360b17383f1294a0a00ec842400a9f1
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        'eac2f54b94e724cbc1d31cdf5835bb67' => __DIR__ . '/../..' . '/App/Helpers/Helper.php',
+        'fe0df7a419ffbe0907c33628e383b8ff' => __DIR__ . '/../..' . '/app/Helpers/Helper.php',
+        '702cb20afd4f17581cb9b680faccbf36' => __DIR__ . '/../..' . '/system/Exceptions/ErrorHandler.php',
+        '9eb215df9391316b8625f2aca8dbf175' => __DIR__ . '/../..' . '/system/Exceptions/ExceptionHandler.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -19,7 +21,6 @@ class ComposerStaticInita360b17383f1294a0a00ec842400a9f1
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
-            'Seymennc\\Asgard\\' => 16,
         ),
         'P' => 
         array (
@@ -52,10 +53,6 @@ class ComposerStaticInita360b17383f1294a0a00ec842400a9f1
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
-        ),
-        'Seymennc\\Asgard\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
         ),
         'PhpOption\\' => 
         array (

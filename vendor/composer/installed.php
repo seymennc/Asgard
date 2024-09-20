@@ -3,7 +3,7 @@
         'name' => 'seymennc/asgard',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '32d680bacf7d064621f009be5cb1f61aeb4de58d',
+        'reference' => 'e9806498ae1fd923b59d55bff21da33c95f24188',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'seymennc/asgard' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '32d680bacf7d064621f009be5cb1f61aeb4de58d',
+            'reference' => 'e9806498ae1fd923b59d55bff21da33c95f24188',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

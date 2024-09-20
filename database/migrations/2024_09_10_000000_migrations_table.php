@@ -7,7 +7,7 @@ use Asgard\system\Migration;
 
 return new class extends Migration
 {
-    public function up(): void
+    public function run(): void
     {
         Blueprint::createTable('migrations', function (Blueprint $table) {
             $table->addColumn('table_name', 'VARCHAR(255)', ['NOT NULL']);
@@ -16,7 +16,7 @@ return new class extends Migration
         });
     }
 
-    public function down(): void
+    public function stop(): void
     {
         Blueprint::dropTable('migrations');
     }

@@ -23,7 +23,7 @@ class Console
 
 
         foreach (glob("{$commandDir}/*.php") as $file) {
-            $className = Config::getAppData('base_path') . '\\App\\Console\\Command\\' . pathinfo($file, PATHINFO_FILENAME);
+            $className = 'Asgard\\App\\Console\\Command\\' . pathinfo($file, PATHINFO_FILENAME);
 
             if (class_exists($className)) {
                 $reflection = new ReflectionClass($className);
@@ -50,7 +50,7 @@ class Console
         $commandClass = $this->commands[$commandName];
         $commandInstance = new $commandClass();
 
-        if (method_exists($commandInstance, $subCommand)) {
+        if ($subCommand != null && method_exists($commandInstance, $subCommand)) {
             call_user_func([$commandInstance, $subCommand], array_slice($argv, 2));
         } else {
             $commandInstance->handle();
