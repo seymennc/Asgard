@@ -32,6 +32,14 @@ function env($key, $default = null)
     $dotenv = Dotenv::createUnsafeImmutable(dirname(__DIR__) . '/../');
     $dotenv->load();
 
-    return getenv($key) ?? $default;
+    return getenv($key) ? getenv($key) : $default;
+}
+function public_path($path): string
+{
+    return "/{$path}";
 }
 
+function config(string $key): string
+{
+    return \Asgard\config\Config::get($key);
+}
