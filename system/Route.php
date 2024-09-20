@@ -5,6 +5,9 @@ namespace Asgard\system;
 
 use Asgard\App\Helpers\Redirect;
 use Asgard\app\Kernel;
+use Asgard\app\Middlewares\middlewares;
+use Asgard\system\Exceptions\Method\MethodNotAllowedException;
+use Asgard\system\Exceptions\Method\PageNotFoundException;
 
 class Route
 {
@@ -23,16 +26,6 @@ class Route
     private static array $namedRoutes = [];
     private static array $methods = [];
     private static array $pageMethod = [];
-
-    /*public static function get($path, $callback): Route
-    {
-        return self::addRoute('get', $path, $callback);
-    }
-
-    public static function post($path, $callback): void
-    {
-        self::addRoute('post', $path, $callback);
-    }*/
 
     public static function method($method): Route
     {
@@ -67,41 +60,74 @@ class Route
         $url = self::getUrl();
         $method = self::getMethods();
 
-        foreach (self::$routes[$method] as $path => $val) {
-            $pattern = self::preparePattern($path);
+        foreach (self::$routes as $httpMethod => $routes) {
+            foreach ($routes as $path => $val) {
+                $pattern = self::preparePattern($path);
 
-            if (preg_match($pattern, $url, $params)) {
-                self::$hasRoute = true;
-                array_shift($params);
-                if (isset($val['middleware']) && is_array($val['middleware'])) {
-                    $middlewareStack = array_reduce(array_reverse($val['middleware']), function ($next, $middlewareName) {
-                        $middlewareClass = Kernel::getMiddlewareClass($middlewareName);
-                        $middlewareInstance = new $middlewareClass();
-                        return function ($request) use ($middlewareInstance, $next) {
-                            return $middlewareInstance->handle($request, $next);
-                        };
-                    }, function ($request) use ($val, $params) {
-                        if (isset($val['redirect'])) {
-                            Redirect::to($val['redirect'], $val['status']);
-                        } else {
-                            self::invokeCallback($val['callback'], $params);
-                        }
-                    });
+                if (preg_match($pattern, $url, $params)) {
+                    self::$hasRoute = true;
+                    self::hasPost($httpMethod, $method);
 
-                    $request = ['url' => $url, 'method' => $method];
-                    $middlewareStack($request);
-                } else {
-                    if (isset($val['redirect'])) {
-                        Redirect::to($val['redirect'], $val['status']);
-                    } else {
-                        self::invokeCallback($val['callback'], $params);
-                    }
+                    array_shift($params);
+                    self::handleMiddleware($val, $url, $method, $params);
+
+                    return;
                 }
-                return;
             }
         }
         self::hasRoute();
     }
+
+
+    private static function matchRoute($path, $url, &$params): bool
+    {
+        $pattern = self::preparePattern($path);
+        return preg_match($pattern, $url, $params);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private static function handleMiddleware($val, $url, $method, $params): void
+    {
+        $globalMiddleware = Middlewares::getDefaultMiddleware();
+        $allMiddleware = array_merge($globalMiddleware, $val['middleware'] ?? []);
+
+        $middlewareStack = array_reduce(
+            array_reverse($allMiddleware),
+            function ($next, $middlewareName) {
+                $middlewareClass = Kernel::getMiddlewareClass($middlewareName);
+                $middlewareInstance = new $middlewareClass();
+                return function (Request $request) use ($middlewareInstance, $next) {
+                    return $middlewareInstance->handle($request, $next);
+                };
+            },
+            function (Request $request) use ($val, $params) {
+                self::handleRoute($val, $params);
+            }
+        );
+
+        $request = new Request();
+
+        $request->url = $url;
+        $request->method = $method;
+
+        $middlewareStack($request);
+    }
+
+
+
+
+
+    private static function handleRoute($val, $params): void
+    {
+        if (isset($val['redirect'])) {
+            Redirect::to($val['redirect'], $val['status']);
+        } else {
+            self::invokeCallback($val['callback'], $params);
+        }
+    }
+
 
     private static function preparePattern($path): string
     {
@@ -122,37 +148,35 @@ class Route
             [$controllerStr, $action] = explode('@', $callback);
             $controller = '\Asgard\App\Controllers\\' . $controllerStr;
 
-            // Kontrolör metodu bir Request nesnesi bekliyor mu?
             $reflectionMethod = new \ReflectionMethod($controller, $action);
-            $requestInstance = null;
+            $methodParams = [];
 
-            if ($reflectionMethod->getNumberOfParameters() > 0) {
-                // İlk parametreyi kontrol et (Request sınıfı mı?)
-                $firstParameter = $reflectionMethod->getParameters()[0];
-                $paramType = $firstParameter->getType();
-
-                if ($paramType && !$paramType->isBuiltin() && $paramType->getName() === 'Asgard\system\Request') {
-                    $requestInstance = new \Asgard\system\Request();
+            foreach ($reflectionMethod->getParameters() as $parameter) {
+                $paramType = $parameter->getType();
+                if ($paramType && !$paramType->isBuiltin()) {
+                    $className = $paramType->getName();
+                    $methodParams[] = new $className();
+                } else {
+                    $methodParams = array_merge($methodParams, $params);
                 }
             }
 
-            // Eğer Request nesnesi varsa, onu kontrolör metoduna geç
-            if ($requestInstance) {
-                echo call_user_func_array([new $controller, $action], array_merge([$requestInstance], $params));
-            } else {
-                echo call_user_func_array([new $controller, $action], $params);
-            }
+            echo call_user_func_array([new $controller, $action], $methodParams);
         }
     }
 
     public static function hasRoute(): void
     {
-        if (self::getMethods() != self::$pageMethod){
-            die('The page is only works with POST method');
+        if (!self::$hasRoute) {
+            die(throw new PageNotFoundException());
         }
-        if (self::$hasRoute === false) {
-            die('Page not found');
+    }
+    public static function hasPost($httpMethod, $method): void
+    {
+        if ($httpMethod !== $method) {
+           die(throw new MethodNotAllowedException("The page only works with a specific POST method"));
         }
+
     }
 
     /**
