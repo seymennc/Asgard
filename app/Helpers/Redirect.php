@@ -11,7 +11,7 @@ class Redirect
      */
     public static function to(string $url, int $status = 301): void
     {
-        header('Location: ' . $url, true, $status);
+        header('Location: ' . route($url), true, $status);
     }
     public static function back(): void
     {
