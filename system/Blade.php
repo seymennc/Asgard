@@ -4,6 +4,8 @@ namespace Asgard\system;
 
 use Asgard\config\Config;
 use Asgard\system\View;
+use Random\RandomException;
+
 class Blade
 {
     public array $config;
@@ -17,9 +19,9 @@ class Blade
     public function __construct()
     {
         $config = [
-            'views' => Config::getBladeData('views'),
-            'cache' => Config::getBladeData('cache'),
-            'suffix' => Config::getBladeData('suffix'),
+            'views' => config('blade.views'),
+            'cache' => config('blade.cache'),
+            'suffix' => config('blade.suffix'),
         ];
         $this->config = $config;
     }
@@ -27,12 +29,12 @@ class Blade
     /**
      * @param string $view
      * @param array $data
-     * @param $extends
+     * @param bool $extends
      * @return false|string
      * Kullanım şekli aşağıdaki gibi:
      * $this->view(string 'viewName', array $data)
      */
-    public function view(string $view, array $data = [], $extends = false): false|string
+    public function view(string $view, array $data = [], bool $extends = false): false|string
     {
         extract($data);
 
@@ -80,6 +82,7 @@ class Blade
         $this->sections();
         $this->extends();
         $this->yields();
+        $this->csrf();
     }
 
     private function variables(): void
@@ -152,11 +155,19 @@ class Blade
         }, $this->view);
     }
 
-    private function include()
+    private function include(): void
     {
         $this->view = preg_replace_callback('/@include\(\'(.*?)\'\)/', function ($matches) {
             return file_get_contents($this->setViewPath($matches[1]));
         }, $this->view);
+    }
+
+    /**
+     * @throws RandomException
+     */
+    private function csrf(): void
+    {
+        $this->view = preg_replace('/@csrf/', '<input type="hidden" name="_csrf_token" value="' . CSRFToken::generate() . '">', $this->view);
     }
 
 }
