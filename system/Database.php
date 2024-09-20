@@ -15,29 +15,8 @@ class Database
 
     public function __construct()
     {
-        $this->db = new \PDO(sprintf('mysql:host=%s;dbname=%s;charset=%s', getenv('DB_HOST'), getenv('DB_NAME'), getenv('DB_CHARSET')), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+        $this->db = new \PDO(sprintf('mysql:host=%s;port=%s;dbname=%s;charset=%s', env('DB_HOST'), env('DB_PORT'), env('DB_NAME'), env('DB_CHARSET')), env('DB_USERNAME'), env('DB_PASSWORD'));
     }
-
-
-
-
-    /** The code in this field is for Database::table('user')->get();**/
-    /*
-
-    public function where($column, $value, $operator = '=')
-    {
-        $this->where[] = $column . ' ' . $operator . ' "' . $value . '"';
-        return $this;
-    }
-    */
-
-//    protected function prepareSql(): void
-//    {
-//        $this->sql = sprintf('SELECT * FROM %s', self::$table);
-//        if(count($this->where)){
-//            $this->sql .= ' WHERE ' . implode(' AND ', $this->where);
-//        }
-//    }
 
     public static function table(string $table): Database
     {
