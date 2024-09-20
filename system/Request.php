@@ -3,15 +3,38 @@
 namespace Asgard\system;
 
 
+use Asgard\system\Exceptions\Method\RequestException;
+
 class Request
 {
 
+    public string $url;
+    public string $method;
+
+
+    public function __construct()
+    {
+        $this->url = self::getUrl();
+        $this->method = self::getMethod();
+    }
+
+    /**
+     * Get a value from the request data (GET, POST, etc.)
+     *
+     * @param $name
+     * @return mixed
+     */
     public function __get($name)
     {
         return $this->input($name);
     }
 
-    public static function all()
+    /**
+     * Get all request data (GET, POST, etc.)
+     *
+     * @return array
+     */
+    public static function all(): array
     {
         return $_REQUEST;
     }
@@ -23,7 +46,7 @@ class Request
      * @param mixed|null $default
      * @return mixed
      */
-    public static function input($key = null, $default = null)
+    public static function input(string $key = null, mixed $default = null): mixed
     {
         if ($key === null) {
             return $_REQUEST;
@@ -38,7 +61,7 @@ class Request
      * @param mixed|null $default
      * @return mixed
      */
-    public static function post($key = null, $default = null)
+    public static function post(string $key = null, mixed $default = null): mixed
     {
         if ($key === null) {
             return $_POST;
@@ -53,7 +76,7 @@ class Request
      * @param mixed|null $default
      * @return mixed
      */
-    public static function get($key = null, $default = null)
+    public static function get(string $key = null, mixed $default = null): mixed
     {
         if ($key === null) {
             return $_GET;
@@ -67,7 +90,7 @@ class Request
      * @param string|null $key
      * @return mixed
      */
-    public static function file($key = null)
+    public static function file(string $key = null): mixed
     {
         if ($key === null) {
             return $_FILES;
@@ -81,7 +104,7 @@ class Request
      * @param string|null $key
      * @return mixed
      */
-    public static function header($key = null)
+    public static function header(string $key = null): mixed
     {
         $headers = getallheaders();
         if ($key === null) {
@@ -95,28 +118,172 @@ class Request
      *
      * @return string
      */
-    public static function method(): string
+    public static function getMethod(): string
     {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
     /**
-     * Get the current request URL.
+     * Get the current request path.
+     *
+     * @return array|string
+     */
+    public static function postData(): array|string
+    {
+        $data = $_POST;
+        if (empty($data)) {
+            return $data = 'empty';
+        }
+        return $data;
+    }
+
+    /**
+     * Get the current request path.
+     *
+     * @return array|string
+     */
+    public static function getData(): array|string
+    {
+        $data = $_GET;
+        if (empty($data)) {
+            return $data = 'empty';
+        }
+        return $data;
+    }
+    /**
+     * Get the current request path.
      *
      * @return string
      */
-    public static function url(): string
+    public static function getUrl(): string
     {
-        return $_SERVER['REQUEST_URI'];
+        return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     }
 
+    /**
+     * Get the current request query parameters.
+     *
+     * @return array|string
+     */
+    public static function getQueryParams(): array|string
+    {
+        $query = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+        if ($query === null) {
+            return $query = 'empty';
+        }
+
+        parse_str($query, $queryParams);
+        return $queryParams;
+    }
+
+    /**
+     * Get the current request cookies.
+     *
+     * @return array|string
+     */
+    public static function getCookies(): array|string
+    {
+        $cookies = [];
+        foreach ($_COOKIE as $name => $value) {
+            $cookies[] = [
+                'name' => $name,
+                'value' => $value,
+            ];
+        }
+        return $cookies ?? 'empty';
+    }
+    /**
+     * Get the current request files.
+     *
+     * @return array|string
+     */
+    public static function getFiles(): array|string
+    {
+        $data = $_FILES;
+        if (empty($data)) {
+            return $data = 'empty';
+        }
+        return $data;
+    }
+    /**
+     * Get the current request headers.
+     *
+     * @return array
+     */
+    public static function getHeaders(): array
+    {
+        if (function_exists('getallheaders')) {
+            return getallheaders();
+        } else {
+            // getallheaders() function may not be available on servers other than Apache
+            // In this case you can manually collect headers from the $_SERVER supersphere.
+            $headers = [];
+            foreach ($_SERVER as $key => $value) {
+                if (substr($key, 0, 5) === 'HTTP_') {
+                    $header = str_replace('_', '-', strtolower(substr($key, 5)));
+                    $headers[$header] = $value;
+                }
+            }
+            return $headers ?? ['No headers found'];
+        }
+    }
+
+    /**
+     * Get the current request body.
+     *
+     * @return string|null
+     */
+    public static function getAuthorizationToken(): ?string
+    {
+        $instance = new self();
+        $headers = $instance->getHeaders();
+        return $headers['Authorization'] ?? 'empty';
+    }
+
+    /**
+     * Get the current request body.
+     *
+     * @return string
+     */
+    public static function getContentType(): string
+    {
+        return $_SERVER['CONTENT_TYPE'] ?? 'empty';
+    }
+
+    /**
+     * Get the current request body.
+     *
+     * @return array
+     */
+    public static function getJsonPayload(): array|string
+    {
+        $instance = new self();
+        $json = [];
+        if ($instance->getContentType() === 'application/json') {
+            $json = file_get_contents('php://input');
+            return json_decode($json, true) ?? [];
+        }else{
+            $json = 'empty';
+        }
+        return $json;
+    }
+
+    /**
+     * Get the current request body.
+     *
+     * @return array|null
+     */
+    public static function getSession(): array|string
+    {
+        return $_SESSION ?? 'empty';
+    }
     /**
      * Check if the request has a specific key.
      *
      * @param string $key
      * @return bool
      */
-    public static function has($key): bool
+    public static function has(string $key): bool
     {
         return isset($_REQUEST[$key]);
     }
@@ -128,7 +295,7 @@ class Request
      * @return void
      * @throws \Exception
      */
-    public static function validate(array $rules)
+    public static function validate(array $rules): void
     {
         $errors = [];
         $defaultPattern = '/^[a-zA-Z0-9\s\.\-\_]+$/';
@@ -215,7 +382,7 @@ class Request
         }
 
         if (!empty($errors)) {
-            throw new \Exception(json_encode($errors));
+            throw new RequestException(json_encode($errors));
         }
     }
 }
