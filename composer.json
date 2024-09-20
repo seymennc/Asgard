@@ -2,19 +2,17 @@
     "name": "seymennc/asgard",
     "autoload": {
         "psr-4": {
-            "Seymennc\\Asgard\\": "src/",
             "Asgard\\": "./",
             "App\\": "app/"
         },
         "files": [
-            "App/Helpers/Helper.php"
+            "app/Helpers/Helper.php",
+            "system/Exceptions/ErrorHandler.php",
+            "system/Exceptions/ExceptionHandler.php"
         ],
         "classmap": [
             "app/Console/"
         ]
-    },
-    "scripts": {
-        "create:start": "php create.php start"
     },
     "authors": [
         {
