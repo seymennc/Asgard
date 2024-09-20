@@ -13,4 +13,8 @@ class Kernel
         }
         return middlewares::$middleware[$name];
     }
+    public static function getDefaultMiddleware(): array
+    {
+        return middlewares::$default;
+    }
 }
