@@ -18,13 +18,16 @@ class Database
         $this->db = new \PDO(sprintf('mysql:host=%s;port=%s;dbname=%s;charset=%s', env('DB_HOST'), env('DB_PORT'), env('DB_NAME'), env('DB_CHARSET')), env('DB_USERNAME'), env('DB_PASSWORD'));
     }
 
+    /**
+     * @param string $table
+     * @return Database
+     */
     public static function table(string $table): Database
     {
         self::$table = $table;
         return new self();
     }
 
-/** The code in this field is for ModelName::where('status', 1)->get(); */
     /**
      * @param string $column
      * @param $value
@@ -38,6 +41,10 @@ class Database
         return $instance;
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public static function insert(array $data): void
     {
         $instance = new static();
@@ -51,12 +58,18 @@ class Database
         $query->execute();
     }
 
+    /**
+     * @return string
+     */
     protected function getTableName(): string
     {
         $array = explode('\\', static::class);
         return $this->tableName ?? sprintf(strtolower(end($array)) . '%s', 's');
     }
-    
+
+    /**
+     * @return void
+     */
     protected function prepareSql(): void
     {
         $this->sql = sprintf('SELECT * FROM %s', $this->getTableName());
@@ -64,6 +77,10 @@ class Database
             $this->sql .= ' WHERE ' . implode(' AND ', $this->where);
         }
     }
+
+    /**
+     * @return false|array
+     */
     public function get(): false|array
     {
         $this->prepareSql();
@@ -72,6 +89,9 @@ class Database
         return $query->fetchAll(\PDO::FETCH_OBJ);
     }
 
+    /**
+     * @return mixed
+     */
     public function first()
     {
         $this->prepareSql();

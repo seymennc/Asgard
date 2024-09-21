@@ -6,7 +6,10 @@ use Asgard\config\Config;
 
 class ErrorHandler
 {
-
+    /**
+     * @param string $key
+     * @return int|string
+     */
     public static function getStatusCode(string $key): int|string
     {
         return config('errors.' . $key) ?? 500;

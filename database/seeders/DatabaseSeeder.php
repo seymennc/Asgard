@@ -8,8 +8,7 @@ class DatabaseSeeder extends Seeder
 {
 
     protected array $seeders = [
-        DenemeSeeder::class,
-        TestSeeder::class,
+        // TODO: Add your seeders here
     ];
     public function run(): void
     {

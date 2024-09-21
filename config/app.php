@@ -21,6 +21,7 @@ return [
     | trace information.
     |
     --------------------------------------------------*/
+
     'debug' => env('DEBUG', true),
 
 
@@ -34,7 +35,9 @@ return [
     | application utilizes.
     |
     --------------------------------------------------*/
+
     'environment' => env('ENVIRONMENT', 'development'),
+
 
     /*------------------------------------------------
     | Timezone
@@ -45,7 +48,9 @@ return [
     | date and date-time functions.
     |
     --------------------------------------------------*/
+
     'timezone' => env('SERVER_TIMEZONE', 'Europe/Istanbul'),
+
 
     /*------------------------------------------------
     | Version
@@ -54,7 +59,9 @@ return [
     | This is the version of the application.
     |
     --------------------------------------------------*/
+
     'version' => env('VERSION', '1.0.0'),
+
 
     /*------------------------------------------------
     | Locale
@@ -64,7 +71,9 @@ return [
     | will be used by the translation service provider.
     |
     --------------------------------------------------*/
+
     'locale' => env('LOCALE', 'en'), //Not yet used
+
 
     /*------------------------------------------------
     | Fallback Locale
@@ -75,7 +84,9 @@ return [
     | available.
     |
     --------------------------------------------------*/
+
     'fallback_locale' => env('FALLBACK_LOCALE', 'en'), //Not yet used
+
 
     /*------------------------------------------------
     | Encoding
@@ -85,7 +96,9 @@ return [
     | that will be used by the application.
     |
     --------------------------------------------------*/
+
     'encoding' => env('ENCODING', 'UTF-8'), //Not yet used
+
 
     /*------------------------------------------------
     | Date Format
@@ -95,7 +108,9 @@ return [
     | format that will be used by the application.
     |
     --------------------------------------------------*/
+
     'date_format' => env('DATE_FORMAT', 'Y-m-d H:i:s'), //Not yet used
+
 
     /*------------------------------------------------
     | Database Connection
@@ -106,6 +121,7 @@ return [
     | application.
     |
     --------------------------------------------------*/
+
     'db_connection' => env('DB_CONNECTION', 'mysql'),
     'db_host' => env('DB_HOST', '127.0.0.1'),
     'db_port' => env('DB_PORT', '3306'),

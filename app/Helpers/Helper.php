@@ -1,7 +1,9 @@
 <?php
 
 use Asgard\App\Helpers\Redirect;
+use Asgard\config\Config;
 use Asgard\system\Blade;
+use Asgard\system\Exceptions\Method\PageNotFoundException;
 use Asgard\System\Route;
 use Dotenv\Dotenv;
 
@@ -9,25 +11,42 @@ use Dotenv\Dotenv;
  * @param string $name
  * @param array $params
  * @return string
+ * @throws PageNotFoundException
  */
 function view(string $name, array $params = []): string
 {
     $blade = new Blade();
-
     return $blade->view($name, $params);
-    //return View::show($name, $params);
 }
 
+/**
+ * @param string $name
+ * @param string $params
+ * @return string
+ * @throws Exception
+ */
 function route(string $name, string $params = ''): string
 {
     return Route::run($name, $params);
 }
+
+/**
+ * @param string $name
+ * @param string $params
+ * @return void
+ * @throws Exception
+ */
 function redirect(string $name, string $params = ''): void
 {
     Redirect::to(route($name, $params));
 }
 
-function env($key, $default = null)
+/**
+ * @param $key
+ * @param $default
+ * @return array|false|mixed|string|null
+ */
+function env($key, $default = null): mixed
 {
     $dotenv = Dotenv::createUnsafeImmutable(dirname(__DIR__) . '/../');
     $dotenv->load();
@@ -41,5 +60,5 @@ function public_path($path): string
 
 function config(string $key): string
 {
-    return \Asgard\config\Config::get($key);
+    return Config::get($key);
 }

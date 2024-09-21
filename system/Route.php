@@ -8,6 +8,7 @@ use Asgard\app\Kernel;
 use Asgard\app\Middlewares\middlewares;
 use Asgard\system\Exceptions\Method\MethodNotAllowedException;
 use Asgard\system\Exceptions\Method\PageNotFoundException;
+use Asgard\system\Exceptions\Method\RequestException;
 
 class Route
 {
@@ -27,6 +28,10 @@ class Route
     private static array $methods = [];
     private static array $pageMethod = [];
 
+    /**
+     * @param $method
+     * @return Route
+     */
     public static function method($method): Route
     {
         self::$methods[$method] = [];
@@ -34,25 +39,37 @@ class Route
     }
 
     /**
-     * @throws \Exception
+     * @param $path
+     * @param $callback
+     * @return Route
+     * @throws RequestException
      */
     public function route($path, $callback): Route
     {
         return self::addRoute(array_key_last(self::$methods), $path, $callback);
     }
 
+    /**
+     * @param $method
+     * @param $path
+     * @param $callback
+     * @return Route
+     * @throws RequestException
+     */
     private static function addRoute($method, $path, $callback): Route
     {
         $formattedPath = '/' . ltrim(self::$prefix . $path, '/');
         if (isset(self::$routes[$method][$formattedPath])) {
-            throw new \Exception("This route already exists: {$formattedPath}");
+            throw new RequestException("This route already exists: {$formattedPath}");
         }
         self::$routes[$method][$formattedPath] = ['callback' => $callback];
         return new self();
     }
 
     /**
-     * @throws \ReflectionException
+     * @return void
+     * @throws MethodNotAllowedException
+     * @throws PageNotFoundException
      * @throws \Exception
      */
     public static function dispatch(): void
@@ -78,7 +95,12 @@ class Route
         self::hasRoute();
     }
 
-
+    /**
+     * @param $path
+     * @param $url
+     * @param $params
+     * @return bool
+     */
     private static function matchRoute($path, $url, &$params): bool
     {
         $pattern = self::preparePattern($path);
@@ -86,7 +108,13 @@ class Route
     }
 
     /**
-     * @throws \Exception
+     * @param $val
+     * @param $url
+     * @param $method
+     * @param $params
+     * @return void
+     * @throws MethodNotAllowedException
+     * @throws \ReflectionException
      */
     private static function handleMiddleware($val, $url, $method, $params): void
     {
@@ -116,9 +144,13 @@ class Route
     }
 
 
-
-
-
+    /**
+     * @param $val
+     * @param $params
+     * @return void
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     private static function handleRoute($val, $params): void
     {
         if (isset($val['redirect'])) {
@@ -128,7 +160,10 @@ class Route
         }
     }
 
-
+    /**
+     * @param $path
+     * @return string
+     */
     private static function preparePattern($path): string
     {
         foreach (self::$patterns as $key => $pattern) {
@@ -138,6 +173,9 @@ class Route
     }
 
     /**
+     * @param $callback
+     * @param $params
+     * @return void
      * @throws \ReflectionException
      */
     private static function invokeCallback($callback, $params): void
@@ -165,12 +203,23 @@ class Route
         }
     }
 
+    /**
+     * @return void
+     * @throws PageNotFoundException
+     */
     public static function hasRoute(): void
     {
         if (!self::$hasRoute) {
             die(throw new PageNotFoundException());
         }
     }
+
+    /**
+     * @param $httpMethod
+     * @param $method
+     * @return void
+     * @throws MethodNotAllowedException
+     */
     public static function hasPost($httpMethod, $method): void
     {
         if ($httpMethod !== $method) {
@@ -187,6 +236,9 @@ class Route
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * @return array|string
+     */
     public static function getUrl(): array|string
     {
         return str_replace(getenv("BASE_PATH"), '', $_SERVER['REQUEST_URI']);
@@ -195,35 +247,55 @@ class Route
     /**
      * @param string $name
      * @return void
+     * @throws RequestException
      */
     public function name(string $name): void
     {
         $key = array_key_last(self::$methods);
         if (isset(self::$namedRoutes[$name])) {
-            throw new \Exception("This route name already exists : {$name}");
+            throw new RequestException("This route name already exists : {$name}");
         }
         $root_path = array_key_last(self::$routes[$key]);
         self::$namedRoutes[$name] = [$key, $root_path];
         self::$pageMethod = [$key];
     }
 
+    /**
+     * @param $prefix
+     * @return Route
+     */
     public static function prefix($prefix): Route
     {
         self::$prefix = $prefix;
         return new self();
     }
 
+    /**
+     * @param \Closure $closure
+     * @return void
+     */
     public static function group(\Closure $closure): void
     {
         $closure();
         self::$prefix = '';
     }
 
+    /**
+     * @param $key
+     * @param $pattern
+     * @return void
+     */
     public function where($key, $pattern): void
     {
         self::$patterns['{' . $key . '}'] = '(' . $pattern . ')';
     }
 
+    /**
+     * @param $from
+     * @param $to
+     * @param $status
+     * @return void
+     */
     public static function redirect($from, $to, $status = 301): void
     {
         self::$routes[self::getMethods()][$from] = [
@@ -231,10 +303,17 @@ class Route
             'status' => $status,
         ];
     }
+
+    /**
+     * @param string $name
+     * @param string $param
+     * @return string
+     * @throws RequestException
+     */
     public static function run(string $name, string $param = ''): string
     {
         if (!isset(self::$namedRoutes[$name])) {
-            throw new \Exception("This route not found: {$name}");
+            throw new RequestException("This route not found: {$name}");
         }
 
         $path = self::$namedRoutes[$name][1];
@@ -245,6 +324,11 @@ class Route
         }
         return $path;
     }
+
+    /**
+     * @param ...$middlewares
+     * @return Route
+     */
     public function middleware(...$middlewares): Route
     {
         $key = array_key_last(self::$routes[self::getMethods()]);

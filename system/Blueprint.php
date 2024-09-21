@@ -13,6 +13,12 @@ class Blueprint
         $db = new Database();
         $this->db = $db->db;
     }
+
+    /**
+     * @param string $tableName
+     * @param callable $callback
+     * @return void
+     */
     public static function createTable(string $tableName, callable $callback): void
     {
         $instance = new static();
@@ -21,7 +27,6 @@ class Blueprint
 
         $callback($instance);
 
-        // Eklenen sütunları da SQL sorgusuna ekle
         foreach ($instance->columns as $column) {
             $sql .= ", " . $column;
         }
@@ -31,6 +36,10 @@ class Blueprint
         $instance->execute($sql);
     }
 
+    /**
+     * @param string $tableName
+     * @return void
+     */
     public static function dropTable(string $tableName): void
     {
         $instance = new static();
@@ -38,6 +47,12 @@ class Blueprint
         $instance->execute($sql);
     }
 
+    /**
+     * @param string $columnName
+     * @param string $type
+     * @param array $options
+     * @return void
+     */
     public function addColumn(string $columnName, string $type, array $options = []): void
     {
         $sqlOptions = [];
@@ -47,22 +62,28 @@ class Blueprint
             }
         }
 
-        // Kolon tanımını oluştur
         $columnDefinition = "$columnName $type";
         if (!empty($sqlOptions)) {
             $columnDefinition .= ' ' . implode(' ', $sqlOptions);
         }
 
-        // Kolonu ekleme için listeye ekle
         $this->columns[] = $columnDefinition;
     }
 
+    /**
+     * @param string $columnName
+     * @return void
+     */
     public function dropColumn(string $columnName): void
     {
         $sql = "ALTER TABLE $this->tableName DROP COLUMN $columnName;";
         $this->execute($sql);
     }
 
+    /**
+     * @param string $sql
+     * @return void
+     */
     protected function execute(string $sql): void
     {
         $exec = $this->db->prepare($sql);

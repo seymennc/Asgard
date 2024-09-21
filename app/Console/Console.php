@@ -17,6 +17,10 @@ class Console
     {
         $this->loadCommands();
     }
+
+    /**
+     * @return void
+     */
     protected function loadCommands(): void
     {
         $commandDir = __DIR__ . '/Command';
@@ -32,6 +36,11 @@ class Console
             }
         }
     }
+
+    /**
+     * @param $argv
+     * @return void
+     */
     public function run($argv): void
     {
         $input = $argv[1] ?? null;
@@ -57,7 +66,10 @@ class Console
         }
     }
 
-    protected function listCommands()
+    /**
+     * @return void
+     */
+    protected function listCommands(): void
     {
         echo "Geçersiz komut. Kullanılabilir komutlar:\n";
         foreach (array_keys($this->commands) as $availableCommand) {

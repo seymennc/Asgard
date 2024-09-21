@@ -3,6 +3,7 @@
 namespace Asgard\system;
 
 use Asgard\config\Config;
+use Asgard\system\Exceptions\Method\PageNotFoundException;
 use Asgard\system\View;
 use Random\RandomException;
 
@@ -31,8 +32,9 @@ class Blade
      * @param array $data
      * @param bool $extends
      * @return false|string
-     * Kullanım şekli aşağıdaki gibi:
+     * The method of use is as follows:
      * $this->view(string 'viewName', array $data)
+     * @throws PageNotFoundException
      */
     public function view(string $view, array $data = [], bool $extends = false): false|string
     {
@@ -47,7 +49,7 @@ class Blade
         $viewPath = $this->config['views'] . '/' . $this->setViewName($view);
 
         if(!file_exists($viewPath)){
-            throw new \Error("View '$viewPath' not found");
+            throw new PageNotFoundException("View '$viewPath' not found");
         }
         $this->view = file_get_contents($viewPath);
         $this->parse();
@@ -66,14 +68,28 @@ class Blade
         return ob_get_clean();
     }
 
+    /**
+     * @param string $view
+     * @return string
+     */
     private function setViewName(string $view): string
     {
         return str_replace('.', '/', $view) . ($this->config['suffix'] ?? self::SUFFIX);
     }
+
+    /**
+     * @param string $view
+     * @return string
+     */
     private function setViewPath(string $view): string
     {
         return $this->config['views'] . '/' . str_replace('.', '/', $view) . ($this->config['suffix'] ?? self::SUFFIX);
     }
+
+    /**
+     * @return void
+     * @throws RandomException
+     */
     public function parse(): void
     {
         $this->include();
@@ -85,6 +101,9 @@ class Blade
         $this->csrf();
     }
 
+    /**
+     * @return void
+     */
     private function variables(): void
     {
         $this->view = preg_replace_callback('/{{(.*?)}}/', function ($matches) {
@@ -94,7 +113,20 @@ class Blade
 
     /**
      * @return void
-     * Kullanım şekli aşağıdaki gibi:
+     * @throws PageNotFoundException
+     *  The method of use is as follows:
+     * @extends(\'layouts\')
+     */
+    private function extends(): void
+    {
+        $this->view = preg_replace_callback('/@extends\(\'(.*?)\'\)/', function ($matches) {
+            return $this->view($matches[1], $this->data, true);
+        }, $this->view);
+    }
+
+    /**
+     * @return void
+     * The method of use is as follows:
      * @foreach(array)
      * -----
      * @endforeach
@@ -110,19 +142,7 @@ class Blade
 
     /**
      * @return void
-     * Kullanım şekli aşağıdaki gibi:
-     * @extends(\'layouts\')
-     */
-    private function extends(): void
-    {
-        $this->view = preg_replace_callback('/@extends\(\'(.*?)\'\)/', function ($matches) {
-            return $this->view($matches[1], $this->data, true);
-        }, $this->view);
-    }
-
-    /**
-     * @return void
-     * Kullanım şekli aşağıdaki gibi:
+     * The method of use is as follows:
      * @section('title', 'Başlık')
      *
      * @section(\'content\')
@@ -145,7 +165,7 @@ class Blade
 
     /**
      * @return void
-     * Kullanım şekli aşağıdaki gibi:
+     * The method of use is as follows:
      * @yield(\'content\')
      */
     private function yields(): void

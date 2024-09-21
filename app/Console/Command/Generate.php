@@ -5,11 +5,15 @@ namespace Asgard\app\Console\Command;
 
 class Generate
 {
-    public function handle()
+    public function handle(): void
     {
         echo "Please provide a valid sub-command (e.g., migration:create).\n";
     }
 
+    /**
+     * @param array $args
+     * @return void
+     */
     public function migration(array $args): void
     {
         $name = $args[0] ?? null;
@@ -49,6 +53,11 @@ class Generate
         }
         echo "Generate file created: $fileName\n";
     }
+
+    /**
+     * @param array $args
+     * @return void
+     */
     public function model(array $args): void
     {
         $name = $args[0] ?? null;
@@ -70,6 +79,11 @@ class Generate
         echo "Generate file created: $fileName\n";
 
     }
+
+    /**
+     * @param array $args
+     * @return void
+     */
     public function seeder(array $args): void
     {
         $name = $args[0] ?? null;
@@ -90,6 +104,10 @@ class Generate
         echo "Generate file created: $fileName\n";
     }
 
+    /**
+     * @param array $args
+     * @return void
+     */
     public function controller(array $args): void
     {
         $name = $args[0] ?? null;
@@ -109,6 +127,10 @@ class Generate
         echo "Generate file created: $fileName\n";
     }
 
+    /**
+     * @param array $args
+     * @return void
+     */
     public function request(array $args): void
     {
         $name = $args[0] ?? null;

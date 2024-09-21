@@ -2,9 +2,10 @@
 
 namespace Asgard\system;
 
+use AllowDynamicProperties;
 use Asgard\database\models\Migrations;
 
-class Migration
+#[AllowDynamicProperties] class Migration
 {
 
     protected ?string $message = null;
@@ -23,7 +24,7 @@ class Migration
 
         if (!empty($files)) {
             foreach ($files as $file) {
-                $migration = require $file; // Anonim sınıfı döndüren dosyayı dahil et
+                $migration = require $file;
                 $className = sprintf(basename($file, '%s'), '.php');
 
                 $spaceMigration = str_repeat(' ', strlen($className) - 28);
@@ -34,7 +35,7 @@ class Migration
                     if (empty(Migrations::where('table_name', $className)->first()->table_name)){
                         echo $this->formatWarningMessage("Migrating:") . $spaceMigration .$className . "\n";
 
-                        $migration->up();
+                        $migration->run();
 
                         Migrations::insert([
                             'table_name' => $className,
@@ -55,7 +56,7 @@ class Migration
 
     public function rollback(): void
     {
-        // Rollback işlemleri
+        // Rollback operations added soon
     }
 
     private function checkAndCreateMigrationsTable(): void

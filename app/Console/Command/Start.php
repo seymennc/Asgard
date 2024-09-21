@@ -22,6 +22,10 @@ class Start
         exec("php -S {$host}:{$port} -t assets 2>&1", $output);
     }
 
+    /**
+     * @param $message
+     * @return void
+     */
     protected function info($message): void
     {
         $boxWidth = strlen($message) - 4;
@@ -30,6 +34,11 @@ class Start
         echo self::COLOR_BLUE_BG . self::COLOR_WHITE . " " . $message . " " . self::COLOR_RESET . " ";
         echo self::COLOR_BLUE_BG . self::COLOR_WHITE . str_repeat(' ', $boxWidth) . self::COLOR_RESET;
     }
+
+    /**
+     * @param $message
+     * @return string
+     */
     protected function success($message): string
     {
         return self::COLOR_GREEN . $message . self::COLOR_RESET;

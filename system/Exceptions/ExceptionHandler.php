@@ -3,7 +3,6 @@
 namespace Asgard\system\Exceptions;
 
 use Asgard\config\Config;
-use Asgard\system\Exceptions\Method\Exception;
 
 class ExceptionHandler
 {

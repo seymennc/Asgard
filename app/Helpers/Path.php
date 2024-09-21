@@ -3,7 +3,7 @@
 namespace Asgard\app\Helpers;
 
 use Asgard\config\Config;
-use http\Exception\InvalidArgumentException;
+use Asgard\system\Exceptions\Method\InvalidArgumentException;
 
 class Path
 {
@@ -12,6 +12,7 @@ class Path
     /**
      * @param $path
      * @return void
+     * @throws InvalidArgumentException
      */
     public static function setBasePath($path): void
     {
@@ -23,6 +24,7 @@ class Path
 
     /**
      * @return string
+     * @throws InvalidArgumentException
      */
     public static function getBasePath(): string
     {

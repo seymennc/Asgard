@@ -219,7 +219,7 @@ class Request
             // In this case you can manually collect headers from the $_SERVER supersphere.
             $headers = [];
             foreach ($_SERVER as $key => $value) {
-                if (substr($key, 0, 5) === 'HTTP_') {
+                if (str_starts_with($key, 'HTTP_')) {
                     $header = str_replace('_', '-', strtolower(substr($key, 5)));
                     $headers[$header] = $value;
                 }
@@ -253,7 +253,7 @@ class Request
     /**
      * Get the current request body.
      *
-     * @return array
+     * @return array|string
      */
     public static function getJsonPayload(): array|string
     {

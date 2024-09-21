@@ -6,7 +6,7 @@ use Asgard\system\Migration;
 
 class Migrate
 {
-    public function handle()
+    public function handle(): void
     {
         $migrate = new Migration();
         $migrate->migrate();

@@ -13,7 +13,11 @@ class CSRFToken
             session_start();
         }
     }
+
     /**
+     * @param Request $request
+     * @param \Closure $next
+     * @return mixed
      * @throws CSRFTokenException
      */
     public function handle(Request $request, \Closure $next)
@@ -28,6 +32,8 @@ class CSRFToken
     }
 
     /**
+     * @param $token
+     * @return void
      * @throws CSRFTokenException
      */
     function verify_csrf_token($token): void
