@@ -1,14 +1,15 @@
 <?php
 
-namespace Asgard\system;
+namespace Asgard\system\Migration;
 
 use AllowDynamicProperties;
 use Asgard\database\models\Migrations;
+use Asgard\system\Database\Database;
 
 #[AllowDynamicProperties] class Migration
 {
 
-    protected ?string $message = null;
+    private static ?string $message;
 
     public function __construct()
     {
@@ -16,11 +17,11 @@ use Asgard\database\models\Migrations;
         $this->db = $db->db;
     }
 
-    public function migrate(): void
+    public static function migrate(): void
     {
-        $files = glob(__DIR__ . '/../database/migrations/*.php');
+        $files = glob(dirname(__DIR__, 2) . '/database/migrations/*.php');
 
-        $this->checkAndCreateMigrationsTable();
+        Methods::checkAndCreateMigrationsTable();
 
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -33,7 +34,7 @@ use Asgard\database\models\Migrations;
 
                 if (is_object($migration) && method_exists($migration, 'run')) {
                     if (empty(Migrations::where('table_name', $className)->first()->table_name)) {
-                        echo $this->formatWarningMessage("Migrating:") . $spaceMigration . $className . "\n";
+                        echo Format::formatWarningMessage("Migrating:") . $spaceMigration . $className . "\n";
 
                         $migration->run();
 
@@ -42,15 +43,15 @@ use Asgard\database\models\Migrations;
                             'created_at' => date('Y-m-d H:i:s')
                         ]);
 
-                        $this->message = $this->formatSuccessMessage("Migrated:") . $spaceMigrated . $className . "\n";
+                        self::$message = Format::formatSuccessMessage("Migrated:") . $spaceMigrated . $className . "\n";
                     }
                 } else {
                     echo "Migration class not found or does not have 'run' method in file: $file\n";
                 }
             }
-            echo $this->message ?? PHP_EOL . $this->formatSuccessMessage('Nothing to migrate!') . PHP_EOL . PHP_EOL;
+            echo self::$message ?? PHP_EOL . Format::formatSuccessMessage('Nothing to migrate!') . PHP_EOL . PHP_EOL;
         } else {
-            echo PHP_EOL . $this->formatWarningMessage('Migration file doesn\'t exists!') . PHP_EOL . PHP_EOL;
+            echo PHP_EOL . Format::formatWarningMessage('Migration file doesn\'t exists!') . PHP_EOL . PHP_EOL;
         }
     }
 
@@ -61,51 +62,6 @@ use Asgard\database\models\Migrations;
 
     public static function createDatabase(): void
     {
-        echo "Database not found. Do you want to create it? (Y/N): ";
-        $handle = fopen("php://stdin", "r");
-        $line = trim(fgets($handle));
-        switch ($line) {
-            case 'Y':
-            case 'y':
-            case 'YE':
-            case 'ye':
-            case 'yes':
-            case 'YES':
-                $pdo = new \PDO("mysql:host=" . env('DB_HOST'), env('DB_USERNAME'), env('DB_PASSWORD'));
-
-                $sql = "CREATE DATABASE IF NOT EXISTS " . env('DB_NAME');
-                $pdo->exec($sql);
-                echo "Database created successfully!" . PHP_EOL;
-
-                $instance = new self();
-                $instance->migrate();
-                break;
-            case 'N':
-                echo "Database not created!" . PHP_EOL;
-                break;
-            default:
-                echo "Invalid input!" . PHP_EOL;
-                break;
-        }
-
-    }
-
-    private function checkAndCreateMigrationsTable(): void
-    {
-        $query = $this->db->query("SHOW TABLES LIKE 'migrations'");
-        if ($query->rowCount() === 0) {
-            $migration = require dirname(__DIR__) . '/database/migrations/2024_09_10_000000_migrations_table.php';
-            $migration->run();
-        }
-    }
-
-    private function formatSuccessMessage(string $message): string
-    {
-        return "\e[32m$message\e[0m";
-    }
-
-    private function formatWarningMessage(string $message): string
-    {
-        return "\e[33m$message\e[0m";
+        Methods::createDatabase();
     }
 }
