@@ -1,12 +1,14 @@
 <?php
 
-namespace Asgard\system;
+namespace Asgard\system\Blueprint;
+
+use Asgard\system\Database\Database;
 
 class Blueprint
 {
     protected \PDO $db;
-    protected string $tableName;
-    protected array $columns = [];
+    public static string $tableName;
+    public static array $columns;
 
     public function __construct()
     {
@@ -21,19 +23,7 @@ class Blueprint
      */
     public static function createTable(string $tableName, callable $callback): void
     {
-        $instance = new static();
-        $instance->tableName = $tableName;
-        $sql = "CREATE TABLE IF NOT EXISTS $tableName (id INT AUTO_INCREMENT PRIMARY KEY";
-
-        $callback($instance);
-
-        foreach ($instance->columns as $column) {
-            $sql .= ", " . $column;
-        }
-
-        $sql .= ");";
-
-        $instance->execute($sql);
+        Table::createTable($tableName, $callback);
     }
 
     /**
@@ -42,9 +32,7 @@ class Blueprint
      */
     public static function dropTable(string $tableName): void
     {
-        $instance = new static();
-        $sql = "DROP TABLE IF EXISTS $tableName;";
-        $instance->execute($sql);
+        Table::dropTable($tableName);
     }
 
     /**
@@ -53,40 +41,28 @@ class Blueprint
      * @param array $options
      * @return void
      */
-    public function addColumn(string $columnName, string $type, array $options = []): void
+    public static function addColumn(string $columnName, string $type, array $options = []): void
     {
-        $sqlOptions = [];
-        if (!empty($options)) {
-            foreach ($options as $option) {
-                $sqlOptions[] = $option;
-            }
-        }
-
-        $columnDefinition = "$columnName $type";
-        if (!empty($sqlOptions)) {
-            $columnDefinition .= ' ' . implode(' ', $sqlOptions);
-        }
-
-        $this->columns[] = $columnDefinition;
+        Column::addColumn($columnName, $type, $options);
     }
 
     /**
      * @param string $columnName
      * @return void
      */
-    public function dropColumn(string $columnName): void
+    public static function dropColumn(string $columnName): void
     {
-        $sql = "ALTER TABLE $this->tableName DROP COLUMN $columnName;";
-        $this->execute($sql);
+        Column::dropColumn($columnName);
     }
 
     /**
      * @param string $sql
      * @return void
      */
-    protected function execute(string $sql): void
+    public static function execute(string $sql): void
     {
-        $exec = $this->db->prepare($sql);
+        $instance = new static();
+        $exec = $instance->db->prepare($sql);
         $exec->execute();
     }
 }
