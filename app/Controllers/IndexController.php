@@ -2,12 +2,20 @@
 
 namespace Asgard\app\Controllers;
 
-use Asgard\database\models\User;
+
+use Asgard\system\Request;
 
 class IndexController extends Controllers
 {
-    public function index()
+
+    public function index(): string
     {
-        //TODO: Implement index() method.
+        return view('asgard');
+    }
+
+
+    public function post(Request $request): string
+    {
+        return $request->all();
     }
 }

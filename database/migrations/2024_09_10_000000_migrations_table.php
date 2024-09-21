@@ -2,8 +2,8 @@
 
 namespace Asgard\database\migrations;
 
-use Asgard\system\Blueprint;
-use Asgard\system\Migration;
+use Asgard\system\Blueprint\Blueprint;
+use Asgard\system\Migration\Migration;
 
 return new class extends Migration
 {

@@ -5,7 +5,7 @@ namespace Asgard\app;
 use Asgard\App\Helpers\Path;
 use Asgard\System\Exceptions\ExceptionSetup;
 use Asgard\system\Exceptions\Method\InvalidArgumentException;
-use Asgard\System\Route;
+use Asgard\system\Route\Route;
 use Dotenv\Dotenv;
 
 class bootstrap
@@ -13,6 +13,7 @@ class bootstrap
 
     /**
      * @throws InvalidArgumentException
+     * @throws \Exception
      */
     public function __construct()
     {

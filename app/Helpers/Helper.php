@@ -2,16 +2,14 @@
 
 use Asgard\App\Helpers\Redirect;
 use Asgard\config\Config;
-use Asgard\system\Blade;
-use Asgard\system\Exceptions\Method\PageNotFoundException;
-use Asgard\System\Route;
+use Asgard\system\Blade\Blade;
+use Asgard\system\Route\Route;
 use Dotenv\Dotenv;
 
 /**
  * @param string $name
  * @param array $params
  * @return string
- * @throws PageNotFoundException
  */
 function view(string $name, array $params = []): string
 {

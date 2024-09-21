@@ -9,9 +9,8 @@
    --------------------------------------------------*/
 
 
-use Asgard\System\Route;
+use Asgard\system\Route\Route;
 
 
-Route::method('get')->route('/', 'HomeController@index')->name('home');
-Route::method('get')->route('/about/deneme/test', 'HomeController@about')->name('about');
-Route::method('post')->route('/post/deneme', 'HomeController@post')->name('post');
+Route::method('get')->route('/', 'IndexController@index')->name('home');
+Route::method('post')->route('/post/deneme', 'IndexController@post')->name('post');
