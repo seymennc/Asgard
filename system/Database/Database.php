@@ -1,11 +1,9 @@
 <?php
 
-namespace Asgard\system;
+namespace Asgard\system\Database;
 
 class Database
 {
-
-
     public \PDO $db;
     public static string $table;
     public array $where = [];
@@ -98,11 +96,5 @@ class Database
         $query = $this->db->prepare($this->sql);
         $query->execute();
         return $query->fetch(\PDO::FETCH_OBJ);
-    }
-    public static function execute(string $sql): void
-    {
-        $instance = new self();
-        $exec = $instance->db->prepare($sql);
-        $exec->execute();
     }
 }
