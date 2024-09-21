@@ -11,5 +11,6 @@ class middlewares extends Kernel
     ];
     protected static array $middleware = [
         'csrf' => \App\Middlewares\CSRFToken::class,
+        'index' => \App\Middlewares\IndexMiddleware::class
     ];
 }

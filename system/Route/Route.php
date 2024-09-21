@@ -24,9 +24,9 @@ class Route extends Methods
     public static bool $hasRoute = false;
     public static array $routes = [];
     public static string $prefix = '';
-    protected static array $namedRoutes = [];
+    public static array $namedRoutes = [];
     public static array $methods = [];
-    protected static array $pageMethod = [];
+    public static array $pageMethod = [];
 
     /**
      * @return void
