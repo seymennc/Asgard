@@ -99,4 +99,10 @@ class Database
         $query->execute();
         return $query->fetch(\PDO::FETCH_OBJ);
     }
+    public static function execute(string $sql): void
+    {
+        $instance = new self();
+        $exec = $instance->db->prepare($sql);
+        $exec->execute();
+    }
 }
