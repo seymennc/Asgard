@@ -2,6 +2,8 @@
 
 namespace Asgard\system;
 
+use Asgard\system\Database\Database;
+
 abstract class Model extends Database
 {
     protected $tableName;
