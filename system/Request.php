@@ -3,6 +3,7 @@
 namespace Asgard\system;
 
 
+use Asgard\system\Database\Database;
 use Asgard\system\Exceptions\Method\RequestException;
 
 class Request
@@ -32,11 +33,11 @@ class Request
     /**
      * Get all request data (GET, POST, etc.)
      *
-     * @return array
+     * @return false|string
      */
-    public static function all(): array
+    public static function all(): false|string
     {
-        return $_REQUEST;
+        return json_encode($_REQUEST);
     }
 
     /**
