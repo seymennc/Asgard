@@ -4,7 +4,7 @@ namespace Asgard\system\Route;
 
 use Asgard\system\Exceptions\Method\RequestException;
 
-class Method
+class Methods
 {
     /**
      * @param $method

@@ -11,7 +11,7 @@ use Asgard\system\Exceptions\Method\PageNotFoundException;
 use Asgard\system\Exceptions\Method\RequestException;
 use Asgard\system\Request;
 
-class Route extends Method
+class Route extends Methods
 {
     public static array $patterns = [
         ':id[0-9]?' => '([0-9]+)',
