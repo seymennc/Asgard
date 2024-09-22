@@ -2,31 +2,35 @@
 
 namespace Asgard\system\Route;
 
-use Asgard\system\Exceptions\Method\RequestException;
+
+use AllowDynamicProperties;
 
 class Methods
 {
+
     /**
      * @param string $method
      * @return RouteBuilder
      */
     public static function method(string $method): RouteBuilder
     {
-        Route::$methods[$method] = [];
-        return new RouteBuilder();
+        $routeBuilder = new RouteBuilder();
+        $routeBuilder->setMethod($method);
+        return $routeBuilder;
     }
 
     /**
      * @param string $name
      * @return void
-     * @throws RequestException
+     * @throws \Exception
      */
-    public function name(string $name): void
+    public static function name(string $name): void
     {
-        $key = array_key_last(Route::$methods);
+        $key = RouteBuilder::getCurrentMethod();
         if (isset(Route::$namedRoutes[$name])) {
-            throw new RequestException("This route name already exists : {$name}");
+            throw new \Exception("This route name already exists : {$name}");
         }
+
         $root_path = array_key_last(Route::$routes[$key]);
         Route::$namedRoutes[$name] = [$key, $root_path];
         Route::$pageMethod = [$key];
@@ -34,19 +38,19 @@ class Methods
 
     /**
      * @param string $prefix
-     * @return Route
+     * @return Methods
      */
-    public static function prefix(string $prefix): Route
+    public static function prefix(string $prefix): Methods
     {
         Route::$prefix = $prefix;
-        return new Route();
+        return new self();
     }
 
     /**
      * @param \Closure $closure
      * @return void
      */
-    public static function group(\Closure $closure): void
+    public function group(\Closure $closure): void
     {
         $closure();
         Route::$prefix = '';
@@ -77,17 +81,27 @@ class Methods
     }
 }
 
-class RouteBuilder
+#[AllowDynamicProperties] class RouteBuilder
 {
+    private static string $currentMethod;
+
+    public function setMethod(string $method): void
+    {
+        self::$currentMethod = $method;
+    }
+    public static function getCurrentMethod(): string
+    {
+        return self::$currentMethod;
+    }
+
     /**
      * @param string $path
      * @param string|callable $callback
      * @return MiddlewareBuilder
-     * @throws RequestException
      */
     public function route(string $path, string|callable $callback): MiddlewareBuilder
     {
-        Handle::addRoute(array_key_last(Route::$methods), $path, $callback);
+        Handle::addRoute($this->getCurrentMethod(), $path, $callback);
         return new MiddlewareBuilder();
     }
 }
@@ -95,7 +109,7 @@ class RouteBuilder
 class MiddlewareBuilder
 {
     /**
-     * @param string[] ...$middlewares
+     * @param mixed ...$middlewares
      * @return MiddlewareBuilder
      */
     public function middleware(...$middlewares): MiddlewareBuilder
@@ -107,19 +121,9 @@ class MiddlewareBuilder
 
     /**
      * @param string $name
-     * @return MiddlewareBuilder
-     * @throws RequestException
      */
-    public function name(string $name): MiddlewareBuilder
+    public function name(string $name): void
     {
-        $key = array_key_last(Route::$methods);
-        if (isset(Route::$namedRoutes[$name])) {
-            throw new RequestException("This route name already exists : {$name}");
-        }
-        $root_path = array_key_last(Route::$routes[$key]);
-        Route::$namedRoutes[$name] = [$key, $root_path];
-        Route::$pageMethod = [$key];
-
-        return $this;
+        Methods::name($name);
     }
 }
